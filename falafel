@@ -1,0 +1,128 @@
+// Inputs: selection
+//Outputs: F_subtotal, X_subtotal, S_subtotal,F_counter, S_counter, X_counter, counter_for_all,real_Bill, only_Tax,
+// Asks user for what food they want and outputs the total bill, the tax, number of items ordered, and number of each item order
+
+
+#include "stdafx.h"	// Use only for Microsoft C++
+#include <iostream>
+#include <cctype>
+#include <iomanip>
+using namespace std;
+
+double get_total(double &total, double const &tax);// gets the total bill
+double get_tax(double total, double const &tax); // computes tax of the bill
+void show_each_item_total(double F_amount, double X_amount, double S_amount); // shows total of each item ordered
+void show_each_item_count(int fcount, int scount, int xcount, int tcount); // shows item quantity
+void Display_Menu();// displays the menu
+
+int main(int argc, char* argv[])
+{
+	// creates variables and have some set to a value
+	double total = 0.00;
+	double const TAX = 0.087;
+	double price;
+	char selection;
+	int counter_for_all = 0;
+	int S_counter = 0;
+	int X_counter = 0;
+	int F_counter = 0;
+	double S_subtotal = 0.00;
+	double F_subtotal = 0.00;
+	double X_subtotal = 0.00;
+	double real_total = 0.00;
+	double only_Tax;
+	double real_Bill;
+	
+
+	
+	
+	// loop to decide which value to use and which counter to add to
+	do
+	{
+		Display_Menu();
+		price = 0;
+		cout << "Make your selection (F,S, or X for food and T to get the total bill: ";
+		cin >> selection;
+
+		switch (selection)
+		{
+		case 'F':
+		case 'f':
+			price = 5.15;
+			counter_for_all++;
+			F_counter++;
+			F_subtotal = F_subtotal + price;
+			break;
+		case 'S':
+		case 's':
+			price = 2.24;
+			S_subtotal = S_subtotal + price;
+			counter_for_all++;
+			S_counter++;
+			break;
+		case 'X':
+		case 'x':
+			price = 1.57;
+			X_subtotal = X_subtotal + price;
+			counter_for_all++;
+			X_counter++;
+			break;
+		case 'T':
+		case 't':
+			break;
+		default:
+			cout << "Illegal selection, try again." << endl;
+
+			
+		}
+		//gets the total here
+		total += price;
+		// sets functions answers equal to a variable
+		only_Tax = get_tax(total, TAX);
+		real_Bill = get_total(total, TAX);
+		
+	} 
+	while (selection != 'T' && selection != 't');
+
+	
+	show_each_item_total(F_subtotal, X_subtotal, S_subtotal); // shows total for each item
+	show_each_item_count(F_counter, S_counter, X_counter, counter_for_all);// shows quantity of each and ll items
+	cout << "The tax for the bill is: $" << setprecision(2) << only_Tax << endl; // shows the tax for bill
+	cout << "The total without tax is: $" << total << endl;
+	cout << "The total is $" << setprecision(2) <<  real_Bill<< endl; // shows total of bill
+	
+	return 0;
+}
+void Display_Menu()
+{
+	// outputs the choices
+	cout << endl;
+	cout << "F = falafel $5.15" << endl;
+	cout << "S = soda $2.24" << endl;
+	cout << "X = extras $1.57" << endl;
+	cout << "T = total" << endl;
+}
+double get_total(double &total, double const &tax)// gets the total bill
+{
+	double real = total + (total * tax);
+	return real;
+}
+double get_tax(double total, double const &tax) // computes tax of bill
+{
+	double tax_bill = total * tax;
+	return tax_bill;
+}
+void show_each_item_total(double F_amount, double X_amount, double S_amount) // outputs price of each item
+{
+	cout << setiosflags(ios::fixed) << setiosflags(ios::showpoint);
+	cout << "Price of F is: " << setprecision(2) << F_amount << endl;
+	cout << "Price of X is: " << setprecision(2) << X_amount << endl;
+	cout << "Price of S is: " << setprecision(2) << S_amount << endl;
+}
+void show_each_item_count(int fcount, int scount, int xcount, int tcount) // outputs count of each item
+{
+	cout << "Number of F items: " << fcount << endl;
+	cout << "Number of X items: " << xcount << endl;
+	cout << "Number of S items: " << scount << endl;
+	cout << "Total number of items: " << tcount << endl;
+}
